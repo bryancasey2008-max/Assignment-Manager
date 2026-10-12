@@ -1,6 +1,10 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
+from flask import Flask
+
+connection = None
+app = Flask(__name__)
 
 # We do not want to hardcode the username and password
 load_dotenv()
@@ -19,11 +23,12 @@ def connect_database():
     except:
         return None
 
-connection = connect_database()
+@app.route("/")
+def home():
+    return "<h1>Hello World</h1>"
 
-if(connection != None):
-    print("Database Connected")
-else:
-    print("Database not connected")
+if __name__ == "__main__":
+    connection = connect_database()
+    app.run()
 
 connection.close()
