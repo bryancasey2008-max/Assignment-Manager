@@ -1,12 +1,13 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from flask import Flask
+from flask import Flask, render_template
 
 connection = None
 app = Flask(__name__)
+app.debug = True
 
-# We do not want to hardcode the username and password
+# We do not want to hardcode any sensitive information
 load_dotenv()
 
 def connect_database():
@@ -25,10 +26,11 @@ def connect_database():
 
 @app.route("/")
 def home():
-    return "<h1>Hello World</h1>"
+    return render_template("index.html")
 
 if __name__ == "__main__":
     connection = connect_database()
+    debug = True
     app.run()
 
 connection.close()

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename='style.css')}}">
+    <script src = "{{ url_for('static', filename='script.js') }}"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>Assignment Manager</h1>
+    <button onclick = "switchTheme()">Dark Mode</button>
+    
+    <div id = "navigation">
+        <button onclick = "switchDiv('uncomplete')">Uncomplete</button>
+        <button onclick = "switchDiv('pastDue')">Past Due</button>
+        <button onclick = "switchDiv('completed')">Completed</button>
+    </div>
+
+    <div id = "uncomplete">
+        Uncomplete
+    </div>
+
+    <div id = "pastDue">
+        Past Due
+    </div>
+
+    <div id = "completed">
+        Completed
+    </div>
+</body>
+</html>
