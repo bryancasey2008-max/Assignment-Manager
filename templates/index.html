@@ -9,16 +9,29 @@
 </head>
 <body>
     <h1>Assignment Manager</h1>
-    <button onclick = "switchTheme()">Dark Mode</button>
-    
+
     <div id = "navigation">
         <button onclick = "switchDiv('uncomplete')">Uncomplete</button>
         <button onclick = "switchDiv('pastDue')">Past Due</button>
         <button onclick = "switchDiv('completed')">Completed</button>
     </div>
 
+    <button onclick = "switchTheme()" id = "switchThemeBtn">Dark Mode: Off</button>
+
+
     <div id = "uncomplete">
-        Uncomplete
+        {% if assignments%}
+
+            {% for assignment in assignments %}
+                <div class = "assignment">
+                    <h2>{{assignment.assignment_subject}}</h2>
+                    <h3>{{assignment.title}}</h3>
+                    <p>{{assignment.assignment_desc}}</p>
+                </div>
+            {% endfor %}
+        {%else%}
+            <p>No assignments yet</p>
+        {% endif %}
     </div>
 
     <div id = "pastDue">
@@ -28,5 +41,7 @@
     <div id = "completed">
         Completed
     </div>
+
+    <a href = "{{ url_for('addStudentPage') }}"><button id = "addAssignment">Add Assignment +</button></a>
 </body>
 </html>

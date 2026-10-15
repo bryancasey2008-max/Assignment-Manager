@@ -52,3 +52,38 @@ body{
 #completed{
     display:none;
 }
+
+#switchThemeBtn{
+    margin: 20px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: var(--default-br);
+    font-size: 1.25rem;
+    font-family: inherit;
+}
+
+#addAssignment{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: hsl(231, 100%, 51%);
+    padding: 15px;
+    color: white;
+    border: none;
+    font-weight: bold;
+    font-size:  1.25em;
+    border-radius: var(--default-br);
+    box-shadow:  0 4px 12px hsla(231, 100%, 43%, 0.25);
+}
+
+#addAssignment:hover{
+    background-color: hsl(231, 100%, 37%);
+}
+
+.assignment{
+    border-radius: var(--default-br);
+    border: 3px solid black;
+    margin-bottom: 30px;
+}

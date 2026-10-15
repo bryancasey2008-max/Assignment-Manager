@@ -26,7 +26,24 @@ def connect_database():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    conn = connect_database()
+
+    if conn is None:
+        print("Database not found")
+
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM assignments")
+    assignments = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    
+    return render_template("index.html", assignments=assignments)
+
+@app.route("/add-student", methods = ["GET", "POST"])
+def addStudentPage():
+    return render_template("addStudent.html")
 
 if __name__ == "__main__":
     connection = connect_database()
