@@ -41,6 +41,7 @@ body{
     background: var(--accent-dark);
 
 }
+
 #uncomplete{
     display: block;
 }
@@ -82,8 +83,43 @@ body{
     background-color: hsl(231, 100%, 37%);
 }
 
-.assignment{
+#assignment{
     border-radius: var(--default-br);
     border: 3px solid black;
     margin-bottom: 30px;
+    width: 90%;
+    padding: 10px;
 }
+
+#buttonDiv{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    left: 70%;
+    gap: 30px;
+}
+
+.buttonOption{
+    position: relative;
+    bottom: 50px;
+    border-radius: var(--default-br);
+    padding: 10px;
+    border: none;
+    font-size: 2em;
+    font-family: inherit;
+    color: white;
+    font-weight: bold;
+}
+
+#complete{
+    background-color: var(--accent);
+}
+
+#edit{
+    background-color: hsl(231, 100%, 51%);;
+}
+
+#delete{
+    background-color: red;
+}
+

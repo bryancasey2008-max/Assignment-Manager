@@ -1,7 +1,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from flask import Flask, render_template, request, redirect,  url_for
+from flask import Flask, render_template, request, redirect,  url_for, flash
 from datetime import datetime
 
 connection = None
@@ -70,12 +70,6 @@ def addStudentPage():
     except ValueError:
         return render_template("addStudent.html", error= "Invalid date or time."), 400
 
-    print("POST received:", request.form)
-
-    print("Parsed due date:", due)
-
-    print("Insert committed")
-
     conn = connect_database()
 
     if conn is None:
@@ -96,6 +90,10 @@ def addStudentPage():
         conn.close()
 
     return redirect(url_for("home"))
+
+@app.route("/assignments/<int:assignment_id>/delete", methods=["POST"])
+def delete_assignment(assignment_id):
+    print(assignment_id)
 
 if __name__ == "__main__":
     app.run()

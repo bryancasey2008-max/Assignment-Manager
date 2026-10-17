@@ -23,10 +23,20 @@
         {% if assignments%}
 
             {% for assignment in assignments %}
-                <div class = "assignment">
+                <div id = "assignment">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
                     <p>{{assignment.assignment_desc}}</p>
+                    
+                    <div id = "buttonDiv">
+                        <button class = "buttonOption" id = "complete">Complete</button>
+                        <button class = "buttonOption" id = "edit" >Edit</button>
+                        <form method = "POST" 
+                        action = "{{ url_for('delete_assignment', assignment_id=assignment.assignment_id) }}">
+                            <button class = "buttonOption" id = "delete">Delete</button>
+                        </form>
+                    </div>
+
                 </div>
             {% endfor %}
         {%else%}
