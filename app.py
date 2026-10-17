@@ -1,7 +1,8 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect,  url_for
+from datetime import datetime
 
 connection = None
 app = Flask(__name__)
@@ -41,13 +42,62 @@ def home():
     
     return render_template("index.html", assignments=assignments)
 
-@app.route("/add-student", methods = ["GET", "POST"])
+@app.route("/add-student", methods=["GET", "POST"])
 def addStudentPage():
-    return render_template("addStudent.html")
+    if request.method == "GET":
+        return render_template("addStudent.html")
+    
+    subject = request.form["subject"].strip()
+    title = request.form["title"].strip()
+    desc = request.form["desc"].strip()
+    am_or_pm = request.form["AMorPM"].strip()
+
+
+    try:
+
+        month = int(request.form["month"])
+        day = int(request.form["day"])
+        year = int(request.form["year"])
+        hour = int(request.form["hour"])
+        minute = int(request.form["minute"])
+
+        if not 1 <= hour <= 12:
+            raise ValueError("Hour out of range")
+
+        hour24 = hour % 12 + (12 if am_or_pm == "PM" else 0)
+        due = datetime(year, month, day, hour24, minute)
+        
+    except ValueError:
+        return render_template("addStudent.html", error= "Invalid date or time."), 400
+
+    print("POST received:", request.form)
+
+    print("Parsed due date:", due)
+
+    print("Insert committed")
+
+    conn = connect_database()
+
+    if conn is None:
+        return render_template("addStudent.html", error= "Database not found"), 500
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" \
+                        "values (%s, %s, %s, %s)",
+                        (subject, title, desc, due),
+                        )
+        conn.commit()
+    except mysql.connector.Error as e:
+        conn.rollback()
+        return render_template("addStudent.html", error= f"Database error {e}"), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
-    connection = connect_database()
-    debug = True
     app.run()
 
 connection.close()
