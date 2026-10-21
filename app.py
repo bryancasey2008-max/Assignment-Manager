@@ -83,19 +83,6 @@ def addStudentPage():
                         "INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" "VALUES (%s, %s, %s, %s)",
                         subject, title, desc, due
                      )
-    #try:
-    #    cursor = conn.cursor()
-    #    cursor.execute("INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" \
-    #                    "values (%s, %s, %s, %s)",
-    #                   (subject, title, desc, due),
-    #                   )
-    #    conn.commit()
-    #except mysql.connector.Error as e:
-    #    conn.rollback()
-    #    return render_template("addStudent.html", error= f"Database error {e}"), 500
-    #finally:
-    #    cursor.close()
-    #    conn.close()
 
     return redirect(url_for("home"))
 
@@ -105,6 +92,25 @@ def delete_assignment(assignment_id):
     execute_database("DELETE FROM assignments WHERE assignment_id = %s", assignment_id)
     return redirect(url_for("home"))
 
+@app.route("/update-student/<int:assignment_id>", methods=["GET", "POST"])
+def updateStudentPage(assignment_id):
+    assignment = get_assignment(assignment_id)
+
+    if request.method == "GET":
+        due = assignment["due_date"]
+
+        form = {
+            "subject": assignment["assignment_subject"],
+            "title": assignment["title"],
+            "desc": assignment["assignment_desc"],
+            "month": due.month,
+            "day": due.day,
+            "year": due.year,
+            "hour": due.hour % 12 or 12,
+            "minute": due.minute,
+            "AMorPM": "PM" if due.hour >= 12 else "AM"
+        }
+        return render_template("updateStudent.html", assignment=assignment, form=form)
 
 def execute_database(query, *args):
     conn = connect_database()
@@ -117,6 +123,17 @@ def execute_database(query, *args):
         return render_template("index.html", error= f"Database error {e}"), 500
     finally:
         cursor.close()
+        conn.close()
+
+def get_assignment(assignment_id):
+    conn = connect_database()
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM assignments WHERE assignment_id = %s", (assignment_id,))
+        return cursor.fetchone()
+    except mysql.connector.Error as e:
+        return None
+    finally:
         conn.close()
 
 if __name__ == "__main__":
