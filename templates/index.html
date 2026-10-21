@@ -20,9 +20,9 @@
 
 
     <div id = "uncomplete">
-        {% if assignments%}
+        {% if upcoming %}
 
-            {% for assignment in assignments %}
+            {% for assignment in upcoming %}
                 <div id = "assignment">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
@@ -36,7 +36,8 @@
                             <button class = "buttonOption" id = "delete">Delete</button>
                         </form>
                     </div>
-
+                    
+                    <p>{{assignment.due_date}}</p>
                 </div>
             {% endfor %}
         {%else%}
@@ -45,7 +46,29 @@
     </div>
 
     <div id = "pastDue">
-        Past Due
+        {% if past_due %}
+
+            {% for assignment in past_due %}
+                <div id = "assignment">
+                    <h2>{{assignment.assignment_subject}}</h2>
+                    <h3>{{assignment.title}}</h3>
+                    <p>{{assignment.assignment_desc}}</p>
+                    
+                    <div id = "buttonDiv">
+                        <button class = "buttonOption" id = "complete">Complete</button>
+                        <button class = "buttonOption" id = "edit" >Edit</button>
+                        <form method = "POST" 
+                        action = "{{ url_for('delete_assignment', assignment_id=assignment.assignment_id) }}">
+                            <button class = "buttonOption" id = "delete">Delete</button>
+                        </form>
+                    </div>
+                    
+                    <p>{{assignment.due_date}}</p>
+                </div>
+            {% endfor %}
+        {%else%}
+            <p>No assignments yet</p>
+        {% endif %}
     </div>
 
     <div id = "completed">

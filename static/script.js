@@ -27,8 +27,11 @@ function switchTheme(){
 function addStudent(event){
     const message = document.getElementById("message");
 
-    const fields = ["title", "desc", "subject", "month", "day", "year", "hour", "minute", "AMorPM"];
-    const allFilled = fields.every(id => getValue(id) !== "" && !isNaN);
+    const fields = ["title", "desc", "subject", "AMorPM"];
+    const numFields = ["month", "day", "year", "hour", "minute"];
+
+    const allFilled = fields.every(id => getValue(id).trim() !== "")
+    && numFields.every(id => getValue(id).trim() !== "" && !isNaN(getValue(id)));
 
     if(allFilled && isValidDueDate()){
         message.style.color = "green";
@@ -39,7 +42,6 @@ function addStudent(event){
         message.style.color = "red";
         message.innerHTML = "Failed adding student";
     }
-
 
 }
 

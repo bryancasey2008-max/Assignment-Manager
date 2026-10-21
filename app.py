@@ -1,7 +1,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from flask import Flask, render_template, request, redirect,  url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 
 connection = None
@@ -33,14 +33,18 @@ def home():
         print("Database not found")
 
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM assignments")
+    cursor.execute("SELECT * FROM assignments ORDER BY due_date")
     assignments = cursor.fetchall()
     
     cursor.close()
     conn.close()
+
+    today = datetime.now()
+    past_due = [a for a in assignments if a["due_date"] < today]
+    upcoming = [a for a in assignments if a["due_date"] >= today]
     
     
-    return render_template("index.html", assignments=assignments)
+    return render_template("index.html", assignments=assignments, past_due=past_due, upcoming=upcoming)
 
 @app.route("/add-student", methods=["GET", "POST"])
 def addStudentPage():
@@ -75,25 +79,45 @@ def addStudentPage():
     if conn is None:
         return render_template("addStudent.html", error= "Database not found"), 500
 
-    try:
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" \
-                        "values (%s, %s, %s, %s)",
-                        (subject, title, desc, due),
-                        )
-        conn.commit()
-    except mysql.connector.Error as e:
-        conn.rollback()
-        return render_template("addStudent.html", error= f"Database error {e}"), 500
-    finally:
-        cursor.close()
-        conn.close()
+    execute_database(
+                        "INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" "VALUES (%s, %s, %s, %s)",
+                        subject, title, desc, due
+                     )
+    #try:
+    #    cursor = conn.cursor()
+    #    cursor.execute("INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" \
+    #                    "values (%s, %s, %s, %s)",
+    #                   (subject, title, desc, due),
+    #                   )
+    #    conn.commit()
+    #except mysql.connector.Error as e:
+    #    conn.rollback()
+    #    return render_template("addStudent.html", error= f"Database error {e}"), 500
+    #finally:
+    #    cursor.close()
+    #    conn.close()
 
     return redirect(url_for("home"))
 
 @app.route("/assignments/<int:assignment_id>/delete", methods=["POST"])
 def delete_assignment(assignment_id):
     print(assignment_id)
+    execute_database("DELETE FROM assignments WHERE assignment_id = %s", assignment_id)
+    return redirect(url_for("home"))
+
+
+def execute_database(query, *args):
+    conn = connect_database()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, args)
+        conn.commit()
+    except mysql.connector.Error as e:
+        conn.rollback()
+        return render_template("index.html", error= f"Database error {e}"), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 if __name__ == "__main__":
     app.run()
