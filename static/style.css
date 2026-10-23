@@ -1,8 +1,29 @@
 :root{
-    --accent: hsl(140, 100%, 33%);
-    --accent-dark: hsl(140, 100%, 25%);
+    --accent: hsl(140, 70%, 32%);
+    --accent-dark: hsl(140, 80%, 24%);
+    --blue: hsl(231, 80%, 52%);
+    --blue-dark: hsl(231, 80%, 40%);
+    --red: hsl(0, 75%, 50%);
+    --purple: hsl(290, 55%, 50%);
+
+    --bg: hsl(140, 20%, 96%);
+    --surface: #fff;
+    --text: hsl(150, 15%, 15%);
+    --border: hsl(140, 15%, 85%);
+
     --default-br: 10px;
+    --shadow: 0 2px 8px hsla(140, 40%, 15%, 0.12);
 }
+
+:root[data-theme="dark"]{
+    --bg: hsl(150, 15%, 10%);
+    --surface: hsl(150, 12%, 16%);
+    --text: hsl(140, 15%, 90%);
+    --border: hsl(150, 10%, 26%);
+    --shadow: 0 2px 8px hsla(0, 0%, 0%, 0.4);
+}
+
+* {box-sizing: border-box;}
 
 h1{
     text-align: center;
@@ -11,115 +32,135 @@ h1{
 
 body{
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 100px;
+    line-height: 1.5;
 }
 
+button{
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s, transform, 0.1s, box-shadow 0.15s;
+}
+button:active{transform: scale(0.97);}
+
+button:focus-visible{
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+}
+
+
 #navigation{
-    margin-top: 40px;
     display:flex;
+    margin: 40px auto 24px;
     flex-direction: row;
     justify-content: space-around;
     background: var(--accent);
     border-radius: var(--default-br);
     overflow: hidden;
     box-shadow:  0 4px 12px hsla(140, 100%, 25%, 0.25);
-    width: 80%;
-    margin: auto;
+    width: 100%;
 }
 
 #navigation button{
-    font-size: 2em;
+    flex: 1;
+    font-size: 1.4rem;
     color:white;
-    font-family: inherit;
-    background: var(--accent);
+    background: transparent;
     border: none;
-    padding: 10px;
+    padding: 12px;
     border-radius: var(--default-br);
     cursor: pointer;
 }
 
 #navigation button:hover{
     background: var(--accent-dark);
-
 }
+
+#navigation button.active{background: var(--accent-dark);}
+
 
 #uncomplete{
     display: block;
 }
 
-#pastDue{
+#pastDue, #completed{
     display: none;
 }
 
-#completed{
-    display:none;
-}
-
 #switchThemeBtn{
-    margin: 20px;
+    margin: 0 0 16px;
     background-color: var(--accent);
     color: white;
     border: none;
     padding: 10px;
     border-radius: var(--default-br);
     font-size: 1.25rem;
-    font-family: inherit;
+    font-size: 1.1rem;
 }
 
 #addAssignment{
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: hsl(231, 100%, 51%);
-    padding: 15px;
+    background-color: var(--blue);
+    padding: 14px 20px;
     color: white;
     border: none;
     font-weight: bold;
-    font-size:  1.25em;
+    font-size:  1.25rem;
     border-radius: var(--default-br);
     box-shadow:  0 4px 12px hsla(231, 100%, 43%, 0.25);
 }
 
 #addAssignment:hover{
-    background-color: hsl(231, 100%, 37%);
+    background-color: var(--blue-dark);
+    box-shadow: 0 6px 16px hsla(231, 80%, 40%, 0.45);
 }
 
-#assignment{
+.assignment{
+    background: var(--surface);
     border-radius: var(--default-br);
-    border: 3px solid black;
-    margin-bottom: 30px;
-    width: 90%;
-    padding: 10px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    padding: 16px 20px;
 }
 
-#buttonDiv{
-    position: relative;
+.buttonDiv{
     display: flex;
-    flex-direction: row;
-    left: 70%;
-    gap: 30px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
 }
 
 .buttonOption{
-    position: relative;
-    bottom: 50px;
     border-radius: var(--default-br);
-    padding: 10px;
+    padding: 8px 16px;
     border: none;
-    font-size: 2em;
-    font-family: inherit;
+    font-size: 1.1rem;
     color: white;
     font-weight: bold;
 }
 
+.buttonOption:hover{filter: brightness(0.88);}
 #complete{
     background-color: var(--accent);
 }
 
 #edit{
-    background-color: hsl(231, 100%, 51%);;
+    background-color: var(--blue);
 }
 
 #delete{
-    background-color: red;
+    background-color: var(--red);
+}
+
+#uncompleteBtn{
+    background-color:  var(--purple)
 }
 

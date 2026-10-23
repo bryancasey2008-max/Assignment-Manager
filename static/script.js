@@ -10,19 +10,43 @@ function switchDiv(nextID){
     document.getElementById(currentID).style.display = 'none';
     document.getElementById(nextID).style.display = 'block';
     currentID = nextID;
+
+    try {sessionStorage.setItem("activeTab", nextID)} catch(e) {}
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (!document.getElementById("uncomplete")) return;
+
+    let saved = null;
+    try { saved = sessionStorage.getItem("activeTab"); } catch (e) {}
+
+    if (saved && document.getElementById(saved)) {
+        switchDiv(saved);
+    }
+});
+
+function applyTheme(theme){
+    document.documentElement.dataset.theme = theme;
+    const switchThemeBtn = document.getElementById("switchThemeBtn");
+    switchThemeBtn.textContent = theme === 'dark' ? "Dark Mode: On" : "Dark Mode: Off";
+    try { localStorage.setItem("theme", theme); } catch (e) {}
 }
 
 function switchTheme(){
-    const body = document.body;
-    const switchThemeBtn = document.getElementById("switchThemeBtn");
-
-    darkMode = !darkMode;
+    const root = document.documentElement;
+    const darkMode = root.dataset.theme === 'dark'
     
-    body.style.backgroundColor = darkMode ? "#1a1a1a" : "white";
-    body.style.color = darkMode ? "white" : "black";
-    switchThemeBtn.innerHTML = darkMode ? "Dark Mode: On" : "Dark Mode: Off";
-
+    applyTheme(darkMode ? 'light' : 'dark');
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    let saved = null;
+    try { saved = sessionStorage.getItem("theme"); } catch (e) {}
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (saved || (prefersDark ? 'dark' : 'light')) {
+        applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+    }
+});
 
 function addStudent(event){
     const message = document.getElementById("message");

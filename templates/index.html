@@ -23,13 +23,16 @@
         {% if upcoming %}
 
             {% for assignment in upcoming %}
-                <div id = "assignment">
+                <div class = "assignment">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
                     <p>{{assignment.assignment_desc}}</p>
                     
-                    <div id = "buttonDiv">
-                        <button class = "buttonOption" id = "complete">Complete</button>
+                    <div class = "buttonDiv">
+                        <form method = "POST" 
+                        action = "{{ url_for('complete_assignment', assignment_id=assignment.assignment_id) }}">
+                            <button class = "buttonOption" id = "complete">Complete</button>
+                        </form>
                         <a href = "{{ url_for('updateStudentPage',  assignment_id=assignment.assignment_id) }}">
                             <button class = "buttonOption" id = "edit" >Edit</button>
                         </a>
@@ -43,7 +46,7 @@
                 </div>
             {% endfor %}
         {%else%}
-            <p>No assignments yet</p>
+            <p>No uncompleted assignments yet</p>
         {% endif %}
     </div>
 
@@ -51,14 +54,17 @@
         {% if past_due %}
 
             {% for assignment in past_due %}
-                <div id = "assignment">
+                <div class = "assignment">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
                     <p>{{assignment.assignment_desc}}</p>
                     
-                    <div id = "buttonDiv">
-                        <button class = "buttonOption" id = "complete">Complete</button>
-                        <a href = "{{ url_for('delete_assignment', assignment_id=assignment.assignment_id) }}"">
+                    <div class = "buttonDiv">
+                        <form method = "POST" 
+                        action = "{{ url_for('complete_assignment', assignment_id=assignment.assignment_id) }}">
+                            <button class = "buttonOption" id = "complete">Complete</button>
+                        </form>
+                        <a href = "{{ url_for('updateStudentPage', assignment_id=assignment.assignment_id) }}">
                             <button class = "buttonOption" id = "edit" >Edit</button>
                         </a>
                         <form method = "POST" 
@@ -71,12 +77,39 @@
                 </div>
             {% endfor %}
         {%else%}
-            <p>No assignments yet</p>
+            <p>No assignments past due yet</p>
         {% endif %}
     </div>
 
     <div id = "completed">
-        Completed
+    {% if completed %}
+
+            {% for assignment in completed %}
+                <div class = "assignment">
+                    <h2>{{assignment.assignment_subject}}</h2>
+                    <h3>{{assignment.title}}</h3>
+                    <p>{{assignment.assignment_desc}}</p>
+                    
+                    <div class = "buttonDiv">
+                        <form method = "POST" 
+                        action = "{{ url_for('uncomplete_assignment', assignment_id=assignment.assignment_id) }}">
+                            <button class = "buttonOption" id = "uncompleteBtn">Uncomplete</button>
+                        </form>
+                        <a href = "{{ url_for('updateStudentPage', assignment_id=assignment.assignment_id) }}"">
+                            <button class = "buttonOption" id = "edit" >Edit</button>
+                        </a>
+                        <form method = "POST" 
+                        action = "{{ url_for('delete_assignment', assignment_id=assignment.assignment_id) }}">
+                            <button class = "buttonOption" id = "delete">Delete</button>
+                        </form>
+                    </div>
+                    
+                    <p>{{assignment.due_date}}</p>
+                </div>
+            {% endfor %}
+        {%else%}
+            <p>No completed assignments yet</p>
+        {% endif %}
     </div>
 
     <a href = "{{ url_for('addStudentPage') }}"><button id = "addAssignment">Add Assignment +</button></a>

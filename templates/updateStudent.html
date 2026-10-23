@@ -8,7 +8,7 @@
     <title>Update Student</title>
 </head>
 <body>
-    <form action = "{{ url_for('updateStudentPage',  assignment_id=assignment.assignment_id) }}" method = "POST" onsubmit="addStudent(event)">
+    <form action = "{{ url_for('updateStudentPage',  assignment_id=assignment.assignment_id) }}" method = "POST">
 
         <label for "subject">Subject</label>
         <select name = "subject" id = "subject">
