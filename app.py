@@ -7,7 +7,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 
 app = Flask(__name__) # App
-app.debug = True # Enable debug mode
 
 # We do not want to hardcode any sensitive information
 load_dotenv()
@@ -205,4 +204,4 @@ def format_due(value):
 
 # actually runs the app
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=False)
