@@ -20,7 +20,7 @@ def connect_database():
             user = os.getenv("DB_USER"),
             password = os.getenv("DB_PASSWORD"),
             database = os.getenv("DB_NAME"),
-            port = 3306
+            port = int(os.getenv("DB_PORT", 3306))
         )
 
         # means connection succesful
@@ -205,4 +205,4 @@ def format_due(value):
 
 # actually runs the app
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=5000)
