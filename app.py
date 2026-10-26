@@ -1,16 +1,18 @@
+#imports
+
 import mysql.connector
 from dotenv import load_dotenv
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 
-connection = None
-app = Flask(__name__)
-app.debug = True
+app = Flask(__name__) # App
+app.debug = True # Enable debug mode
 
 # We do not want to hardcode any sensitive information
 load_dotenv()
 
+# Connects to the database by name, user, password, host, and port from a .env file
 def connect_database():
     try:
         connection = mysql.connector.connect(
@@ -21,85 +23,87 @@ def connect_database():
             port = 3306
         )
 
-        return connection
-    except:
+        # means connection succesful
+        return connection 
+    except mysql.connector.Error as e:
+        # return nothing if failed to connect
+        print("Database connection failed:", e)
         return None
 
+#main page
 @app.route("/")
 def home():
-    conn = connect_database()
+    conn = connect_database() # Connect database
 
     if conn is None:
-        print("Database not found")
+        return "Database connection failed", 500
 
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM assignments ORDER BY due_date")
-    assignments = cursor.fetchall()
-    
+    cursor = conn.cursor(dictionary=True) # Allows to return query results
+    cursor.execute("SELECT * FROM assignments ORDER BY due_date") # Selects everything from assignments ordered by due date
+    assignments = cursor.fetchall() # Gets each record
+
+    # Close cursor and connection
     cursor.close()
     conn.close()
 
-    today = datetime.now()
-    completed = [a for a in assignments if a["complete"]]
-    past_due = [a for a in assignments if a["due_date"] < today and not a["complete"]]
-    upcoming = [a for a in assignments if a["due_date"] >= today and not a["complete"]]
+    today = datetime.now() # Current date today
+    completed = [a for a in assignments if a["complete"]] # Looks for completed assignments
+    past_due = [a for a in assignments if a["due_date"] < today and not a["complete"]] # Looks for past-due assignments that are past due
+    upcoming = [a for a in assignments if a["due_date"] >= today and not a["complete"]] # Looks for uncomplete assignments 
     
     
     return render_template("index.html", assignments=assignments, past_due=past_due, upcoming=upcoming, completed=completed)
 
+# Navigate to addStudents.html
 @app.route("/add-student", methods=["GET", "POST"])
 def addStudentPage():
     if request.method == "GET":
         return render_template("addStudent.html")
+
     
-    subject = request.form["subject"].strip()
-    title = request.form["title"].strip()
-    desc = request.form["desc"].strip()
-    am_or_pm = request.form["AMorPM"].strip()
+    subject = request.form["subject"].strip() # Assignment subject
+    title = request.form["title"].strip() # Assignment title
+    desc = request.form["desc"].strip() # Assignment desc
 
+    # Assignment due date
+    # Try/catch statement to check for validity
 
+    # Try to get datetime
     try:
-
-        month = int(request.form["month"])
-        day = int(request.form["day"])
-        year = int(request.form["year"])
-        hour = int(request.form["hour"])
-        minute = int(request.form["minute"])
-
-        if not 1 <= hour <= 12:
-            raise ValueError("Hour out of range")
-
-        hour24 = hour % 12 + (12 if am_or_pm == "PM" else 0)
-        due = datetime(year, month, day, hour24, minute)
+        due = get_datetime()
         
+
+    # Error for invalid date    
     except ValueError:
         return render_template("addStudent.html", error= "Invalid date or time."), 400
 
-
-    execute_database(
+    # Actally adds assignment to the database
+    execute_query(
                         "INSERT INTO assignments (assignment_subject, title, assignment_desc, due_date)" "VALUES (%s, %s, %s, %s)",
                         subject, title, desc, due
                      )
 
+    # Redirect back to main page after
     return redirect(url_for("home"))
 
+# deletes an assignment from the database
 @app.route("/assignments/<int:assignment_id>/delete", methods=["POST"])
 def delete_assignment(assignment_id):
-    print(assignment_id)
-    execute_database("DELETE FROM assignments WHERE assignment_id = %s", assignment_id)
+    execute_query("DELETE FROM assignments WHERE assignment_id = %s", assignment_id)
     return redirect(url_for("home"))
 
+# Sets an assignment as complete when users presses complete button for an assignment
 @app.route("/assignments/<int:assignment_id>/complete", methods=["POST"])
 def complete_assignment(assignment_id):
-    print(assignment_id)
-    execute_database("UPDATE assignments SET complete = 1 WHERE assignment_id = %s ", assignment_id)
+    execute_query("UPDATE assignments SET complete = 1 WHERE assignment_id = %s ", assignment_id)
     return redirect(url_for("home"))
 
+# Sets an assignment as uncomplete when users presses uncomplete button for an assignment
 @app.route("/assignments/<int:assignment_id>/uncompleteBtn", methods=["POST"])
 def uncomplete_assignment(assignment_id):
-    print(assignment_id)
-    execute_database("UPDATE assignments SET complete = 0 WHERE assignment_id = %s ", assignment_id)
+    execute_query("UPDATE assignments SET complete = 0 WHERE assignment_id = %s ", assignment_id)
     return redirect(url_for("home"))
+
 
 @app.route("/update-student/<int:assignment_id>", methods=["GET", "POST"])
 def updateStudentPage(assignment_id):
@@ -107,7 +111,7 @@ def updateStudentPage(assignment_id):
 
     if request.method == "GET":
         due = assignment["due_date"]
-
+        # Gets properties of a selected assignmen, then display them for each input box
         form = {
             "subject": assignment["assignment_subject"],
             "title": assignment["title"],
@@ -121,38 +125,28 @@ def updateStudentPage(assignment_id):
         }
         return render_template("updateStudent.html", assignment=assignment, form=form)
 
-    subject = request.form["subject"].strip()
-    title = request.form["title"].strip()
-    desc = request.form["desc"].strip()
-    am_or_pm = request.form["AMorPM"].strip()
+    subject = request.form["subject"].strip() # Assignment subject
+    title = request.form["title"].strip() #Assignment  title
+    desc = request.form["desc"].strip() # Assignment description
     
-    
+    # Try to get datetime
     try:
-    
-        month = int(request.form["month"])
-        day = int(request.form["day"])
-        year = int(request.form["year"])
-        hour = int(request.form["hour"])
-        minute = int(request.form["minute"])
-
-        if not 1 <= hour <= 12:
-            raise ValueError("Hour out of range")
-
-        hour24 = hour % 12 + (12 if am_or_pm == "PM" else 0)
-        due = datetime(year, month, day, hour24, minute)
+       due = get_datetime()
         
     except ValueError:
         return render_template("update_student.html", error= "Invalid date or time."), 400
     
-    
-    execute_database(
+    # Actually edit the student in database
+    execute_query(
                         "UPDATE assignments SET assignment_subject = %s, title = %s, assignment_desc = %s, due_date = %s WHERE assignment_id = %s",
                         subject, title, desc, due, assignment_id
                         )
-    
+
+    # Redirect back to main page after
     return redirect(url_for("home"))
 
-def execute_database(query, *args):
+# Function to prevent repetition, and save lines of code
+def execute_query(query, *args):
     conn = connect_database()
 
     if conn is None:
@@ -160,15 +154,37 @@ def execute_database(query, *args):
     
     cursor = conn.cursor()
     try:
-        cursor.execute(query, args)
+        cursor.execute(query, args) # Executes the query and with the properites if any
         conn.commit()
     except mysql.connector.Error as e:
-        conn.rollback()
+        conn.rollback() # Rollback if any errors
         raise
     finally:
+        # Close cursor and connection
         cursor.close()
         conn.close()
 
+# Gets the datetime
+def get_datetime():
+    am_or_pm = request.form["AMorPM"].strip() # AM or PM
+    month = int(request.form["month"]) # Month 
+    day = int(request.form["day"]) # Day
+    year = int(request.form["year"]) # Year
+    hour = int(request.form["hour"]) #Hour
+    minute = int(request.form["minute"]) # Minute
+
+    # Hour is out of range of hour isn't between 1 and 12
+    if not 1 <= hour <= 12:
+        raise ValueError("Hour out of range")
+
+    # Adds 12 if it's pm (only allows military time)
+    hour24 = hour % 12 + (12 if am_or_pm == "PM" else 0)
+
+    # Full datetime
+    return datetime(year, month, day, hour24, minute)
+
+
+# Gets properties of an assignment by selected id
 def get_assignment(assignment_id):
     conn = connect_database()
     try:
@@ -180,7 +196,13 @@ def get_assignment(assignment_id):
     finally:
         conn.close()
 
+# Puts dur date in an AM-PM format instead of showing it in military time
+@app.template_filter("format_due")
+def format_due(value):
+    hour = value.hour % 12 or 12
+    am_pm = "PM" if value.hour >= 12 else "AM"
+    return f"{value.strftime('%b %d, %Y')} {hour}:{value.minute:02d} {am_pm}"
+
+# actually runs the app
 if __name__ == "__main__":
     app.run()
-
-connection.close()

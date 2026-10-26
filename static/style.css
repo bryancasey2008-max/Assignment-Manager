@@ -121,7 +121,7 @@ button:focus-visible{
     box-shadow: 0 6px 16px hsla(231, 80%, 40%, 0.45);
 }
 
-.assignment{
+.box{
     background: var(--surface);
     border-radius: var(--default-br);
     border: 1px solid var(--border);
@@ -130,6 +130,104 @@ button:focus-visible{
     padding: 16px 20px;
 }
 
+/* ---------- Form ---------- */
+
+#form {
+    /* remove the fixed height so the form grows with its content */
+    font-size: 1.5rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 6px;
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 1.5rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--default-br);
+    padding: 10px 12px;
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+form textarea {
+    min-height: 140px;
+    max-width: 100%;
+    resize: none;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: var(--text);
+    opacity: 0.45;
+}
+
+form input:hover,
+form select:hover,
+form textarea:hover {
+    border-color: var(--accent);
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px hsla(231, 80%, 52%, 0.25);
+}
+
+/* invalid state, only after the user has typed something */
+form input:user-invalid,
+form textarea:user-invalid {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px hsla(0, 75%, 50%, 0.2);
+}
+
+/* put a checkbox and its label on one line */
+.checkRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.checkRow label { margin: 0; }
+
+/* custom select arrow */
+form select {
+    appearance: none;
+    cursor: pointer;
+    padding-right: 36px;
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--text) 50%),
+        linear-gradient(135deg, var(--text) 50%, transparent 50%);
+    background-position:
+        calc(100% - 20px) 55%,
+        calc(100% - 14px) 55%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+}
+
+/* disabled */
+form input:disabled,
+form select:disabled,
+form textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 .buttonDiv{
     display: flex;
     justify-content: flex-end;
@@ -164,3 +262,16 @@ button:focus-visible{
     background-color:  var(--purple)
 }
 
+#submitBtn{
+    background-color: var(--purple);
+}
+
+#backBtn{
+    background-color: var(--red);
+    text-decoration: none;
+}
+
+.row{
+    display: flex;
+    gap:10px;
+}

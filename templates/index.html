@@ -23,7 +23,7 @@
         {% if upcoming %}
 
             {% for assignment in upcoming %}
-                <div class = "assignment">
+                <div class = "box">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
                     <p>{{assignment.assignment_desc}}</p>
@@ -42,7 +42,7 @@
                         </form>
                     </div>
                     
-                    <p>{{assignment.due_date}}</p>
+                    <p>{{assignment.due_date | format_due}}</p>
                 </div>
             {% endfor %}
         {%else%}
@@ -54,7 +54,7 @@
         {% if past_due %}
 
             {% for assignment in past_due %}
-                <div class = "assignment">
+                <div class = "box">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
                     <p>{{assignment.assignment_desc}}</p>
@@ -73,7 +73,7 @@
                         </form>
                     </div>
                     
-                    <p>{{assignment.due_date}}</p>
+                    <p>{{assignment.due_date | format_due}}</p>
                 </div>
             {% endfor %}
         {%else%}
@@ -85,7 +85,7 @@
     {% if completed %}
 
             {% for assignment in completed %}
-                <div class = "assignment">
+                <div class = "box">
                     <h2>{{assignment.assignment_subject}}</h2>
                     <h3>{{assignment.title}}</h3>
                     <p>{{assignment.assignment_desc}}</p>
@@ -104,7 +104,7 @@
                         </form>
                     </div>
                     
-                    <p>{{assignment.due_date}}</p>
+                    <p>{{assignment.due_date | format_due}}</p>
                 </div>
             {% endfor %}
         {%else%}
