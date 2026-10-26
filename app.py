@@ -5,11 +5,14 @@ from dotenv import load_dotenv
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
+from pathlib import Path
+
+env_path = Path(__file__).parent / ".env"
+print("Looking for .env at:", env_path, "| exists:", env_path.exists())
+load_dotenv(env_path)
+print("DB_USER:", os.getenv("DB_USER"), "| DB_NAME:", os.getenv("DB_NAME"))
 
 app = Flask(__name__) # App
-
-# We do not want to hardcode any sensitive information
-load_dotenv()
 
 # Connects to the database by name, user, password, host, and port from a .env file
 def connect_database():
@@ -133,7 +136,7 @@ def updateStudentPage(assignment_id):
        due = get_datetime()
         
     except ValueError:
-        return render_template("update_student.html", error= "Invalid date or time."), 400
+        return render_template("updateStudent.html", error= "Invalid date or time."), 400
     
     # Actually edit the student in database
     execute_query(
