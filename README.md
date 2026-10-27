@@ -1,8 +1,8 @@
-Assignment Manager
+# Assignment Manager
 
-A web application that allows students to track assignments and deadlines
+A full-stack web application that allows students to track assignments, and manage deadlines.
 
-Features:
+## Features
   - Create assignments
   - Edit assignments
   - View assignment dashboard
@@ -11,19 +11,19 @@ Features:
   - View overdue assignments
 
 
-Technologies Used:
+## Technologies Used
   - Python
   - Flask
   - HTML/CSS
   - JavaScript
   - SQLite
 
-Future Improvements:
+## Future Improvements
   - Email reminders
   - Calendar view
   - Priority levels
 
-Screenshots
+## Screenshots
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/e90646e4f72d7ba349eaa888880824e88e090030/Screenshot%202026-10-26%20202823.png)
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201355.png)
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201438.png)
