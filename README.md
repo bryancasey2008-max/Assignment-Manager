@@ -24,8 +24,7 @@ Future Improvements:
   - Priority levels
 
 Screenshots
-![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/4abc4b9ca07aac402c6d03ce5b6c14acc4d9379c/Screenshot%202026-10-26%20200647.png)
-![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201325.png)
+![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/e90646e4f72d7ba349eaa888880824e88e090030/Screenshot%202026-10-26%20202823.png)
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201355.png)
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201438.png)
 
