@@ -9,6 +9,7 @@ A full-stack web application that allows students to track assignments, and mana
   - Delete assignments
   - Mark assignments complete
   - View overdue assignments
+	- Change theme of website
 
 
 ## Technologies Used
@@ -28,5 +29,4 @@ A full-stack web application that allows students to track assignments, and mana
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201355.png)
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/839e47c54985f2a49c29fd8bd3609aa605ad3349/Screenshot%202026-10-26%20201438.png)
 
-Change Themes
 ![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/22c1444f3d74a8a96b7561fe4458c2854ab37dae/Screenshot%202026-10-26%20202107.png)
