@@ -7,9 +7,9 @@ A full-stack web application that allows students to track assignments, and mana
   - Edit assignments
   - View assignment dashboard
   - Delete assignments
-	- Change theme of website
   - Mark assignments complete
   - View overdue assignments
+  - Chamge theme of website
 
 
 ## Technologies Used
